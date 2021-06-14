@@ -1,6 +1,8 @@
+/* eslint-disable react/react-in-jsx-scope */
 import Head from 'next/head'
 import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const styles =  require('../styles/Home.module.css')
 
 export default function Home() {
   return (
