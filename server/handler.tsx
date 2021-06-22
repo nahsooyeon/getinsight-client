@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as dotenv from "dotenv";
 dotenv.config();
-import { KeywordBody, keywordGroups } from "./interfaces/interfaces";
+import { KeywordBody, keywordGroups } from "../interfaces/interfaces";
 
 export default (req, res) => {
   console.log('hi');
@@ -27,21 +27,15 @@ const headers = {
   "Content-Type": "application/json",
 };
 
-module.exports.searchKeyword = async (body: KeywordBody) => {
+module.exports.searchKeyword = async (req: Request, res: Response) => {
+  console.log(req.body);
+  console.log('searchKeyword 실행');
   return axios
-    .post(api_url, JSON.stringify(body), {
+    .post(api_url, JSON.stringify(req.body), {
       headers: headers,
     })
     .then((response) => {
-      return {
-        statusCode: 200,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-        },
-        body: JSON.stringify({
-          data: response.data.results,
-        }),
-      };
+      res.send(response.data.results);
     })
     .catch((err) => console.log(err));
 };

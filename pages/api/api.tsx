@@ -15,9 +15,10 @@ const headers = {
   "Content-Type": "application/json",
 };
 
-export const getKeywordData = (body: KeywordBody) => {
-  console.log('실행됨');
-  return api.post(api_url, body, { headers: headers });
+export const getKeywordData = (data: KeywordBody) => {
+  console.log(data);
+  console.log('서버에 전송 요청 시도');
+  return api.post('/search/keyword', data);
 };
 
 

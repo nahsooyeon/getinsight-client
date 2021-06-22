@@ -1,12 +1,10 @@
 import React, { ReactElement, useRef, useState, useEffect } from 'react';
-import { Request, Response } from 'express';
 import axios from 'axios';
 import * as dotenv from 'dotenv';
 import ApexCharts from 'apexcharts';
 import { KeywordBody, keywordGroups } from '../interfaces/interfaces';
 import dummyResponse from "../dummyResult.json";
 import dummyRequest from "../dummydata.json";
-import searchKeyword from "../handler";
 import { getKeywordData } from "./api/api";
 
 dotenv.config();
