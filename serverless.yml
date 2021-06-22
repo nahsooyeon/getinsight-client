@@ -1,2 +1,24 @@
-falsyExempleServerlessNext:
-  component: "@sls-next/serverless-component@1.18.0"
+GetinsightServerlessNext:
+  component: "@sls-next/serverless-component@latest"
+  functions:
+    searchKeyword:
+      handler: handler.searchKeyword
+      events:
+        - http:
+            path: /search
+            method: post
+            cors:
+              origin: "*"
+              headers:
+                - Content-Type: "application/json"
+                - X-Naver-Client-Id: b1OydQYTzV8PJo4hLqvx
+                - X-Naver-Client-Secret: uw4NgDkA_5
+  inputs:
+    domain: "getinsight-demo.net"
+    roleArn: "arn:aws:iam::933964304108:role/getinsight-role"
+    bucketName: "getinsight-demo.net"
+    cloudfront:
+      distributionId: E2A0ERRLO7CIGA
+    # name:
+    #   defaultLambda:
+    #     apiLambda:
