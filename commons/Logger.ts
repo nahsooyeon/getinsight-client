@@ -4,7 +4,7 @@ import { createLogger, format, transports } from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
 
 const env = process.env.NODE_ENV || 'development';
-const logDir = __dirname + '/log';
+const logDir = process.cwd() + '/log';
 
 if (!fs.existsSync(logDir)) {
   fs.mkdirSync(logDir);
