@@ -1,10 +1,15 @@
 import React, { ReactElement, useEffect, useState } from 'react';
+import Link from 'next/link';
 
-function Nav(props: any): ReactElement {
-	return <>
-		<div className="nav">
-			<div className="keyword-tab"></div>
-			<div className="shopping-tab"></div>
-		</div>
-	</>;
-}
+const Nav = (props: any) => (
+	<div className="nav">
+		<Link href="/search">
+			<a></a>
+		</Link>
+
+		<Link href="/shopping"><a></a></Link>
+	</div>
+);
+
+
+export default Nav;

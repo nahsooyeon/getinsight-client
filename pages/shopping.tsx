@@ -1,4 +1,5 @@
 import React, { ReactElement, useState } from 'react';
+import Nav from "../components/nav";
 
 
 
@@ -10,6 +11,7 @@ function Shopping(): ReactElement {
 
 	return (
 		<div>
+			<Nav />
 			<div className="Shopping-container">
 				<h1>쇼핑 트렌드 분석 서비스</h1>
 				<input type="text" />
