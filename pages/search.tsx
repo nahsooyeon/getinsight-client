@@ -1,24 +1,21 @@
 import React, { ReactElement, useRef, useState, useEffect } from 'react';
-import axios from 'axios';
-import * as dotenv from 'dotenv';
 import ApexCharts from 'apexcharts';
+
+import api from "../commons/apiUtil";
 import { KeywordBody, keywordGroups } from '../interfaces/interfaces';
+
 import dummyResponse from "../dummyResult.json";
 import dummyRequest from "../dummydata.json";
-import { getKeywordData } from "./api/api";
 
-dotenv.config();
 
 function Search(): ReactElement {
 	/* 메인 검색어, 하위 검색어, 시작 날짜, 끝날짜, 시간 단위 */
-	const [keyword, setKeyword] = useState('운동화');
-	const [startDate, setStartDate] = useState('2021-04-01');
-	const [endDate, setEndDate] = useState('2021-04-30');
+	const [keyword, setKeyword] = useState('');
+	const [startDate, setStartDate] = useState('');
+	const [endDate, setEndDate] = useState('');
 	const [timeUnit, setTimeUnit] = useState('date');
 	const [resultData, setresultData] = useState({});
 	const keywordInput = useRef<HTMLInputElement>(null);
-
-
 
 	/* useEffect(() => {
 		setKeyword('');
@@ -26,17 +23,18 @@ function Search(): ReactElement {
 
 
 	/* 월간 검색량 요청 함수 */
-	/* const searchData = async () => {
-
-
-			}; */
-
+	const searchData = async (data: KeywordBody) => {
+		const result = await api({
+			method: "post",
+			url: "search",
+			data
+		});
+		return result;
+	};
 
 	/* 검색어 클릭 함수*/
 	const clickSearch = () => {
-		getKeywordData(dummyRequest);
-		console.log('버튼눌림');
-
+		searchData(dummyRequest);
 	};
 
 	return (
@@ -72,7 +70,6 @@ function Search(): ReactElement {
 						</div>
 					) : (<>키워드와 검색 기간을 입력해주세요.</>)}
 				</div>
-
 			</div>
 		</>
 	);

@@ -1,3 +1,5 @@
+const Dotenv = require("dotenv-webpack");
+
 module.exports = {
   target: "serverless",
   webpack: (config, { isServer }) => {
@@ -9,6 +11,8 @@ module.exports = {
         tls: "empty",
         "fs-extra": "empty",
       };
+    } else {
+      config.plugins.push(new Dotenv({ silent: true }));
     }
     return config;
   },

@@ -9,9 +9,13 @@
   },
   "dependencies": {
     "@next/bundle-analyzer": "^11.0.0",
+    "@types/cors": "^2.8.10",
     "axios": "^0.21.1",
+    "class-validator": "^0.13.1",
     "cors": "^2.8.5",
+    "dayjs": "^1.10.5",
     "dotenv-load": "^2.0.0",
+    "dotenv-webpack": "^7.0.3",
     "express": "^4.17.1",
     "fs": "^0.0.1-security",
     "next": "10.2.3",
@@ -22,7 +26,9 @@
     "sass": "^1.35.1",
     "serverless": "^2.47.0",
     "serverless-http": "^2.7.0",
-    "webpack": "^5.39.1"
+    "webpack": "^5.39.1",
+    "winston": "^3.2.1",
+    "winston-daily-rotate-file": "^4.5.5"
   },
   "devDependencies": {
     "@types/dotenv": "^8.2.0",
