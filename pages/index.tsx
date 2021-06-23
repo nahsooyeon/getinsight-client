@@ -4,7 +4,7 @@ import Link from 'next/link';
 import React, { ReactElement } from 'react';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const styles = require('../styles/Home.module.css');
+const styles = require('../styles/Home.module.scss');
 
 export default function Home(): ReactElement {
   return (
@@ -31,25 +31,12 @@ export default function Home(): ReactElement {
           <Link href="/shopping">
             <a className={styles.card}>
               <h2>쇼핑 트렌드 분석 &rarr;</h2>
-              <p>특정 카테고리의 인기검색어와 검색 트렌트를 분석하세요</p>
+              <p>특정 카테고리의 인기검색어와 검색 트렌드를 분석하세요</p>
             </a>
           </Link>
 
         </div>
       </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
-      </footer>
     </div>
   );
 }
