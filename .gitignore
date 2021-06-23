@@ -38,4 +38,6 @@ yarn-error.log*
 .vercel
 
 serverless.yml
-
+yarn.lock
+package-lock.json
+log/
