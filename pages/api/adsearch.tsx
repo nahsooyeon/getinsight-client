@@ -10,7 +10,7 @@ import CryptoJS from "crypto-js";
 
 
 
-const api_url = "/ncc/managedKeyword";
+const api_url = "/keywordstool";
 const method = "GET";
 const timestamp = Date.now() + '';
 const hmac = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA256, process.env.NAVER_SERACHAD_SECRET);
@@ -24,30 +24,26 @@ const headers = {
   'X-CUSTOMER': process.env.NAVER_SERACHAD_ID,
   'X-Signature': hash.toString(CryptoJS.enc.Base64),
 
-
 };
 
-const dummy = '운동화';
-
 export default async function handler(req: Request, res: Response) {
-  // if (req.method === 'GET') {
-  //   const result = await adKeywordSearch('운동화');
-  //   res.status(200).json(result);
-  // } else {
-  //   res.status(403).json({ success: false });
-  // }
-  const result = await adKeywordSearch(encodeURI('운동화'));
-  console.log(result);
-  res.status(200).json(result);
+  if (req.method === 'POST' && req.body.keywordGroups[0]) {
+    console.log(req.body.keywordGroups[0]);
+    const result = await adKeywordSearch(req.body.keywordGroups[0].groupName);
+    console.log(result.data);
+    res.status(200).json(result.data);
+  } else {
+    res.status(403).json({ success: false });
+  }
+
 }
-
-
 
 const adKeywordSearch = async (data: string) => {
   let result;
   try {
-    const response = await axios.get(`https://api.naver.com/ncc/managedKeyword?${data}`, { headers: headers });
-    console.log(response);
+    const response = await axios.get('https://api.naver.com/keywordstool?hintKeywords=' + encodeURI(data) + '&showDetail=1', {
+      headers: headers,
+    });
     result = response;
   } catch (error) {
     console.log(error);
