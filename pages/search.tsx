@@ -1,12 +1,12 @@
 import React, { ReactElement, useRef, useState, useEffect, useMemo } from 'react';
-import KeywordGraph from '../components/keywordgraph';
+import OpenDataGraph from "../components/opendatagraph";
+import AdDataGraph from "../components/addatagraph";
 import Select from "react-select";
 import Nav from "../components/nav";
 
 import api from "../commons/apiUtil";
-import { KeywordBody, keywordGroups, KeywordResult } from '../interfaces/interfaces';
+import { KeywordBody, keywordGroups, KeywordResult, KeywordListElement } from '../interfaces/interfaces';
 
-import dummyResult from "../dummyResult.json";
 
 function Search(): ReactElement {
   /* 메인 검색어, 하위 검색어, 시작 날짜, 끝날짜, 시간 단위 */
@@ -17,7 +17,8 @@ function Search(): ReactElement {
   const [requestData, setRequestData] = useState<KeywordBody>({});
   const [keywordGroup, setKeywordGroup] = useState<keywordGroups[]>([]);
 
-  const [resultData, setResultData] = useState<KeywordResult>({});
+  const [openData, setOpenData] = useState<KeywordResult>({});
+  const [adData, setAdData] = useState<KeywordListElement[]>([]);
   const keywordInput = useRef<HTMLInputElement>(null);
   const startDateInput = useRef<HTMLInputElement>(null);
   const endDateInput = useRef<HTMLInputElement>(null);
@@ -48,23 +49,33 @@ function Search(): ReactElement {
   };
 
 
-  /* 월간 검색량 요청 함수 */
+  /* 데이터랩 api 요청 함수 */
   const searchData = async (data: KeywordBody) => {
     const result = await api({
       method: "post",
       url: "search",
       data
     });
-    setResultData(result.data);
+    setOpenData(result.data);
+
+  };
+
+  /* 검색광고 api 요청 함수 */
+  const adSearchData = async (data: KeywordBody) => {
+    const result = await api({
+      method: "post",
+      url: "adsearch",
+      data
+    });
+    setAdData(result.data);
 
   };
 
   /* 검색어 클릭 함수*/
-  const clickSearch = () => {
-    console.log(requestData);
+  const clickSearch = async () => {
     /* 한 정보라도 빠져있다면 에러 발생! */
     /*  */
-    setRequestData({
+    await setRequestData({
       startDate: startDate,
       endDate: endDate,
       timeUnit: timeUnit,
@@ -74,8 +85,7 @@ function Search(): ReactElement {
       }]
 
     });
-    console.log(requestData);
-
+    adSearchData(requestData);
     searchData(requestData);
   };
 
@@ -88,7 +98,6 @@ function Search(): ReactElement {
   const onInputTimeUnitHandler = (value) => {
     setTimeUnit(value);
   };
-
 
   return (
     <>
@@ -121,9 +130,10 @@ function Search(): ReactElement {
               </div>
             </div>
           </div>
-          {Object.keys(resultData).length > 0 ? (
-            <div className="keyword-result-view">키워드 검색 결과입니다.
-              <KeywordGraph resultData={resultData} />
+          {Object.keys(openData).length > 0 ? (
+            <div className="keyword-result-view">s
+              <OpenDataGraph resultData={openData} />
+              <AdDataGraph resultData={adData} />
             </div>
           ) : (<>키워드와 검색 기간을 입력해주세요.</>)}
         </div>
