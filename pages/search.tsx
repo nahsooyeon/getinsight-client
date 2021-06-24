@@ -24,7 +24,6 @@ function Search(): ReactElement {
 
 
   useEffect(() => {
-    setResultData(dummyResult);
   }, []);
 
   /* 입력값 핸들러 함수 */
@@ -42,11 +41,9 @@ function Search(): ReactElement {
     if (e.target.name === 'start-date') {
       setStartDate(e.target.value);
       console.log('실행됨');
-      requestData.startDate = startDate;
     } else {
       setEndDate(e.target.value);
       console.log('실행됨');
-      requestData.endDate = endDate;
     }
   };
 
@@ -58,7 +55,7 @@ function Search(): ReactElement {
       url: "search",
       data
     });
-    console.log(result);
+    setResultData(result.data);
 
   };
 
@@ -67,7 +64,19 @@ function Search(): ReactElement {
     console.log(requestData);
     /* 한 정보라도 빠져있다면 에러 발생! */
     /*  */
-    // searchData(requestData);
+    setRequestData({
+      startDate: startDate,
+      endDate: endDate,
+      timeUnit: timeUnit,
+      keywordGroups: [{
+        groupName: keyword,
+        keywords: [keyword]
+      }]
+
+    });
+    console.log(requestData);
+
+    searchData(requestData);
   };
 
   /* 검색기간 메뉴 설정 */
@@ -78,8 +87,6 @@ function Search(): ReactElement {
 
   const onInputTimeUnitHandler = (value) => {
     setTimeUnit(value);
-    requestData.timeUnit = timeUnit;
-    console.log(requestData);
   };
 
 
