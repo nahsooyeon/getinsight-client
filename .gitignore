@@ -4,6 +4,8 @@
 /node_modules
 /.pnp
 .pnp.js
+/.serverless
+/.serverless_nextjs
 
 
 
@@ -13,6 +15,7 @@
 # next.js
 /.next/
 /out/
+
 
 # production
 /build
