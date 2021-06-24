@@ -36,3 +36,17 @@ export interface searchElement {
   period: string,
   ratio: number;
 }
+
+
+export interface KeywordListElement {
+  relKeyword?: string,
+  monthlyPcQcCnt?: number,
+  monthlyMobileQcCnt?: number;
+  monthlyAvePcClkCnt?: number,
+  monthlyAveMobileClkCnt?: number,
+  monthlyAvePcCtr?: number,
+  monthlyAveMobileCtr?: number,
+  plAvgDepth?: number,
+  compIdx?: string;
+
+}
