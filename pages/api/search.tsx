@@ -64,10 +64,11 @@ const naverSearch = async (data: KeywordBody) => {
     // 	data,
     // 	headers,
     // });
+    console.log('데이터랩 api 요청완료');
     result = response.data;
   } catch (error) {
 
-    console.error("error");
+    console.error(error);
   }
   return result;
 };

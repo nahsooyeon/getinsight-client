@@ -27,10 +27,8 @@ const headers = {
 };
 
 export default async function handler(req: Request, res: Response) {
-  if (req.method === 'POST' && req.body.keywordGroups[0]) {
-    console.log(req.body.keywordGroups[0]);
-    const result = await adKeywordSearch(req.body.keywordGroups[0].groupName);
-    console.log(result.data);
+  if (req.method === 'POST') {
+    const result = await adKeywordSearch(req.body.keyword);
     res.status(200).json(result.data);
   } else {
     res.status(403).json({ success: false });
@@ -45,6 +43,8 @@ const adKeywordSearch = async (data: string) => {
       headers: headers,
     });
     result = response;
+    console.log('검색광고 api 요청완료');
+
   } catch (error) {
     console.log(error);
   }
