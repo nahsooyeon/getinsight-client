@@ -9,10 +9,16 @@ interface Props {
 
 function adDataGraph(props: Props): ReactElement {
   const { resultData } = props;
-  const graphData = {};
+  for (let i = 1; i < 11; i++) {
+    resultData[i];
+  }
+
 
   return (<>
-    <div className="월간 검색량"></div>
+
+    <div className="monthlyQcCnt">
+
+    </div>
   </>);
 }
 
