@@ -2,10 +2,19 @@
 
 .search-page-view {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
 
   .search-container {
+    border: 3px solid black;
+    display: flex;
+    flex-direction: column;
+    ._css-2b097c-container {
+      width: 0.5rem;
+    }
+    & > .timeTab {
+      width: 10rem;
+    }
     h1 {
       border: pink solid 3px;
       text-align: center;
@@ -13,10 +22,11 @@
     }
     & > .search-input-bar {
       display: flex;
+      align-self: center;
       input.keyword-input {
         width: 15rem;
         height: 3rem;
-        font-size: 2rem;
+        font-size: 1.5rem;
       }
       .search-btn {
         /* Button/Primary/Default */
@@ -133,4 +143,44 @@
 }
 .select-options li[rel='hide'] {
   display: none;
+}
+.keyword-result-view {
+  border: 3px solid green;
+  display: flex;
+  flex-direction: column;
+  .result-view-container {
+    border: 3px solid blue;
+    display: flex;
+    flex-direction: column;
+    & > .result-graph-container {
+      display: flex;
+      flex-direction: row;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      & > div {
+        align-content: center;
+      }
+    }
+    & > .hintKeywords {
+      border: solid 3px black;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      & > .title {
+        font-size: 1.5rem;
+        padding: 2rem;
+      }
+      & > .hint-keywords-table {
+        tr > th {
+          padding-bottom: 1rem;
+          padding-right: 0.3rem;
+          padding-left: 0.3rem;
+          font-size: 0.9rem;
+        }
+      }
+    }
+  }
 }
