@@ -1,6 +1,5 @@
 import React, { ReactElement, useRef, useState, useEffect, useMemo } from 'react';
-import OpenDataGraph from "../components/opendatagraph";
-import AdDataGraph from "../components/addatagraph";
+
 import ResultView from '../components/resultview';
 import Select from "react-select";
 import Nav from "../components/nav";
@@ -14,8 +13,11 @@ import range from "lodash/range";
 
 import api from "../commons/apiUtil";
 import { KeywordBody, keywordGroups, KeywordResult, KeywordListElement } from '../interfaces/interfaces';
-const Now = new Date();
 
+
+
+
+const Now = new Date();
 function Search(): ReactElement {
   function getFormatDate(date) {
     let year = date.getFullYear();
@@ -25,26 +27,27 @@ function Search(): ReactElement {
     day = day >= 10 ? day : '0' + day;
     return year + '-' + month + '-' + day;
   }
+
   /* 메인 검색어, 하위 검색어, 시작 날짜, 끝날짜, 시간 단위 */
   const [keyword, setKeyword] = useState('');
   const [startDate, setStartDate] = useState<Date | null>(new Date());
+
   const [endDate, setEndDate] = useState<Date | null>(new Date());
   const [timeUnit, setTimeUnit] = useState('');
+
   const [requestData, setRequestData] = useState<KeywordBody>({});
-  const [keywordGroup, setKeywordGroup] = useState<keywordGroups[]>([]);
 
   const [openData, setOpenData] = useState<KeywordResult>({});
   const [adData, setAdData] = useState<KeywordListElement[]>([]);
   const keywordInput = useRef<HTMLInputElement>(null);
-  // const endDateInput = useRef<HTMLInputElement>(null);
 
   interface adKeywordBody {
     keyword: string;
   }
 
-  useEffect(() => {
+  // useEffect(() => {
 
-  }, []);
+  // }, []);
 
   /* 입력값 핸들러 함수 */
   const onInputKeywordHandler = (e: {
@@ -53,10 +56,10 @@ function Search(): ReactElement {
     setKeyword(e.target.value);
   };
 
+
   /* 날짜 정보 설정 함수 */
 
   const handleStartDateChange = (date: Date | null, event: React.SyntheticEvent<any, Event>) => {
-
     setStartDate(date);
   };
 
@@ -79,7 +82,6 @@ function Search(): ReactElement {
     "11월",
     "12월"
   ];
-
 
   /* 데이터랩 api 요청 함수 */
   const searchData = async (data: KeywordBody) => {
@@ -106,9 +108,13 @@ function Search(): ReactElement {
   /* 검색어 클릭 함수*/
   const clickSearch = async () => {
     /* 한 정보라도 빠져있다면 에러 발생! */
-    /*  */
+    /*  */5;
     if (!keyword || !startDate || !endDate || !timeUnit) {
       alert("모든 정보를 입력해주세요");
+    } else if (startDate > endDate) {
+      alert("종료 일자는 시작 일자보다 빠를 수 없습니다.");
+    } else if (endDate >= Now) {
+      alert("키워드 트렌드 검색은 어제 일자까지 가능합니다.");
     } else {
       setRequestData({
         startDate: getFormatDate(startDate),
@@ -118,10 +124,11 @@ function Search(): ReactElement {
           groupName: keyword,
           keywords: [keyword]
         }]
-
       });
-      await adSearchData({ keyword: keyword });
-      await searchData(requestData);
+      if (requestData) {
+        await adSearchData({ keyword: keyword });
+        await searchData(requestData);
+      }
     }
   };
 
@@ -136,6 +143,7 @@ function Search(): ReactElement {
     setTimeUnit(value);
   };
 
+
   return (
     <>
       <div className="search-page-view">
@@ -143,119 +151,123 @@ function Search(): ReactElement {
         <div className="search-container">
           <h1>키워드 검색 서비스</h1>
           <div className="search-input-bar">
-            <input type="text" className="keyword-input" ref={keywordInput} onChange={onInputKeywordHandler} />
+            <input type="text" className="keyword-input" ref={keywordInput} onChange={onInputKeywordHandler} placeholder={"키워드를 입력하세요"} />
             <button type="button" className="search-btn" onClick={() => {
               clickSearch();
-            }}>Search</button>
+            }}>검색</button>
           </div>
-          <Select options={timeUnitOptions} onChange={(value) => { onInputTimeUnitHandler(value.value); }} />
-          <DatePicker
-            renderCustomHeader={({
-              date,
-              changeYear,
-              changeMonth,
-              decreaseMonth,
-              increaseMonth,
-              prevMonthButtonDisabled,
-              nextMonthButtonDisabled,
-            }) => (
-              <div
-                style={{
-                  margin: 10,
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled}>
-                  {"<"}
-                </button>
-                <select
-                  value={getYear(date)}
-                  onChange={({ target: { value } }) => changeYear(Number(value))}
+          <Select className="timeTab" options={timeUnitOptions} onChange={(value) => { onInputTimeUnitHandler(value.value); }} />
+          <div>
+            <DatePicker
+              renderCustomHeader={({
+                date,
+                changeYear,
+                changeMonth,
+                decreaseMonth,
+                increaseMonth,
+                prevMonthButtonDisabled,
+                nextMonthButtonDisabled,
+              }) => (
+                <div
+                  style={{
+                    margin: 10,
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
                 >
-                  {years.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-                <select
-                  value={months[getMonth(date)]}
-                  onChange={({ target: { value } }) =>
-                    changeMonth(months.indexOf(value))
-                  }
-                >
-                  {months.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
+                  <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled}>
+                    {"<"}
+                  </button>
+                  <select
+                    value={getYear(date)}
+                    onChange={({ target: { value } }) => changeYear(Number(value))}
+                  >
+                    {years.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                  <select
+                    value={months[getMonth(date)]}
+                    onChange={({ target: { value } }) =>
+                      changeMonth(months.indexOf(value))
+                    }
+                  >
+                    {months.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
 
-                <button onClick={increaseMonth} disabled={nextMonthButtonDisabled}>
-                  {">"}
-                </button>
-              </div>
-            )}
+                  <button onClick={increaseMonth} disabled={nextMonthButtonDisabled}>
+                    {">"}
+                  </button>
+                </div>
+              )}
+              selected={startDate}
+              onChange={handleStartDateChange}
+              locale="ko"
+              dateFormat="yyyy-MM-dd"
+            />
 
-            selected={startDate}
-            onChange={handleStartDateChange}
-            locale="ko"
-            dateFormat="yyyy-MM-dd"
-          />
-          <DatePicker
-            renderCustomHeader={({
-              date,
-              changeYear,
-              changeMonth,
-              decreaseMonth,
-              increaseMonth,
-              prevMonthButtonDisabled,
-              nextMonthButtonDisabled,
-            }) => (
-              <div
-                style={{
-                  margin: 10,
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled}>
-                  {"<"}
-                </button>
-                <select
-                  value={getYear(date)}
-                  onChange={({ target: { value } }) => changeYear(Number(value))}
+          </div>
+          <div>
+            <DatePicker
+              renderCustomHeader={({
+                date,
+                changeYear,
+                changeMonth,
+                decreaseMonth,
+                increaseMonth,
+                prevMonthButtonDisabled,
+                nextMonthButtonDisabled,
+              }) => (
+                <div
+                  style={{
+                    margin: 10,
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
                 >
-                  {years.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-                <select
-                  value={months[getMonth(date)]}
-                  onChange={({ target: { value } }) =>
-                    changeMonth(months.indexOf(value))
-                  }
-                >
-                  {months.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
+                  <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled}>
+                    {"<"}
+                  </button>
+                  <select
+                    value={getYear(date)}
+                    onChange={({ target: { value } }) => changeYear(Number(value))}
+                  >
+                    {years.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                  <select
+                    value={months[getMonth(date)]}
+                    onChange={({ target: { value } }) =>
+                      changeMonth(months.indexOf(value))
+                    }
+                  >
+                    {months.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
 
-                <button onClick={increaseMonth} disabled={nextMonthButtonDisabled}>
-                  {">"}
-                </button>
-              </div>
-            )}
-            selected={endDate}
-            onChange={handleEndDateChange}
-            locale="ko"
-            dateFormat="yyyy-MM-dd"
-          />
+                  <button onClick={increaseMonth} disabled={nextMonthButtonDisabled}>
+                    {">"}
+                  </button>
+                </div>
+              )}
+              selected={endDate}
+              onChange={handleEndDateChange}
+              locale="ko"
+              dateFormat="yyyy-MM-dd"
+            />
+          </div>
           {Object.keys(openData).length > 0 ? (
             <div className="keyword-result-view">
               <ResultView openData={openData} keyword={keyword} adData={adData} />

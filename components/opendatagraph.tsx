@@ -17,6 +17,7 @@ function openDataGraph(props: Props): ReactElement {
   const data = {
     options: {
       chart: {
+        width: "300px",
         zoom: {
           enabled: false,
         }
@@ -39,7 +40,7 @@ function openDataGraph(props: Props): ReactElement {
   };
 
   return (
-    <div className="line-graph-view">그래프 구역입니다
+    <div className="line-graph-view">
       <Chart options={data.options} series={data.series} type="line" width="500" />
     </div>
   );
