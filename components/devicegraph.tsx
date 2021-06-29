@@ -20,6 +20,7 @@ function DeviceGraph(props: Props): ReactElement {
           enabled: false,
         }
       },
+
       labels: ['PC', 'Mobile'],
       tooltip: {
         enabled: true,
@@ -28,7 +29,10 @@ function DeviceGraph(props: Props): ReactElement {
           fontColor: "black",
         },
       },
-
+      legend: {
+        show: true,
+        position: "bottom"
+      },
     },
     series: [
       resultData.monthlyPcQcCnt, resultData.monthlyMobileQcCnt
