@@ -1,18 +1,19 @@
 import React, { ReactElement, useRef, useState, useEffect, useMemo } from 'react';
-
 import ResultView from '../components/resultview';
+// import "../styles/components/_datepicker.scss";
 import Select from "react-select";
 import Nav from "../components/nav";
 import DatePicker, { registerLocale } from "react-datepicker";
 import { ko } from 'date-fns/locale';
 registerLocale("ko", ko);
-import "react-datepicker/dist/react-datepicker.css";
+
 import getYear from "date-fns/getYear";
 import getMonth from "date-fns/getMonth";
 import range from "lodash/range";
+import ApiController from "./api/naverapi";
 
 import api from "../commons/apiUtil";
-import { KeywordBody, keywordGroups, KeywordResult, KeywordListElement } from '../interfaces/interfaces';
+import { KeywordBody, KeywordResult, KeywordListElement } from '../interfaces/interfaces';
 
 
 
@@ -30,24 +31,25 @@ function Search(): ReactElement {
 
   /* 메인 검색어, 하위 검색어, 시작 날짜, 끝날짜, 시간 단위 */
   const [keyword, setKeyword] = useState('');
-  const [startDate, setStartDate] = useState<Date | null>(new Date());
+  const [startDate, setStartDate] = useState<Date>(new Date(Now.getTime() - 24 * 60 * 60 * 1000 * 2));
 
-  const [endDate, setEndDate] = useState<Date | null>(new Date());
+  const [endDate, setEndDate] = useState<Date>(new Date(Now.getTime() - 24 * 60 * 60 * 1000));
   const [timeUnit, setTimeUnit] = useState('');
-
-  const [requestData, setRequestData] = useState<KeywordBody>({});
 
   const [openData, setOpenData] = useState<KeywordResult>({});
   const [adData, setAdData] = useState<KeywordListElement[]>([]);
   const keywordInput = useRef<HTMLInputElement>(null);
 
+  const aMonthBtn = useRef<HTMLButtonElement>(null);
+  const threeMonthBtn = useRef<HTMLButtonElement>(null);
+  const aYearBtn = useRef<HTMLButtonElement>(null);
+  const noneBtn = useRef<HTMLButtonElement>(null);
+
+
+
   interface adKeywordBody {
     keyword: string;
   }
-
-  // useEffect(() => {
-
-  // }, []);
 
   /* 입력값 핸들러 함수 */
   const onInputKeywordHandler = (e: {
@@ -55,18 +57,13 @@ function Search(): ReactElement {
   }) => {
     setKeyword(e.target.value);
   };
-
-
   /* 날짜 정보 설정 함수 */
-
-  const handleStartDateChange = (date: Date | null, event: React.SyntheticEvent<any, Event>) => {
+  const handleStartDateChange = (date: Date, _event: React.SyntheticEvent<any, Event>) => {
     setStartDate(date);
   };
-
-  const handleEndDateChange = (date: Date | null, event: React.SyntheticEvent<any, Event>) => {
+  const handleEndDateChange = (date: Date, _event: React.SyntheticEvent<any, Event>) => {
     setEndDate(date);
   };
-
   const years = range(2006, getYear(new Date()) + 1, 1);
   const months = [
     "1월",
@@ -101,43 +98,98 @@ function Search(): ReactElement {
       url: "adsearch",
       data
     });
-    setAdData(result.data.keywordList);
 
+    setAdData(result.data.keywordList);
   };
 
   /* 검색어 클릭 함수*/
   const clickSearch = async () => {
     /* 한 정보라도 빠져있다면 에러 발생! */
-    /*  */5;
+    /*  */
+    const requestData = {
+      startDate: getFormatDate(startDate),
+      endDate: getFormatDate(endDate),
+      timeUnit: timeUnit,
+      keywordGroups: [{
+        groupName: keyword,
+        keywords: [keyword]
+      }]
+    };
+    await searchData(requestData);
+
+    await adSearchData({ keyword: keyword });
+
+
     if (!keyword || !startDate || !endDate || !timeUnit) {
       alert("모든 정보를 입력해주세요");
     } else if (startDate > endDate) {
       alert("종료 일자는 시작 일자보다 빠를 수 없습니다.");
     } else if (endDate >= Now) {
       alert("키워드 트렌드 검색은 어제 일자까지 가능합니다.");
-    } else {
-      setRequestData({
-        startDate: getFormatDate(startDate),
-        endDate: getFormatDate(endDate),
-        timeUnit: timeUnit,
-        keywordGroups: [{
-          groupName: keyword,
-          keywords: [keyword]
-        }]
-      });
-      if (requestData) {
-        await adSearchData({ keyword: keyword });
-        await searchData(requestData);
-      }
     }
   };
+  /* 검색기간 자동 설정(1개월/3개월/1년 단위) */
+  const clickTabs = ((e: string) => {
+    if (e === 'aMonth') {
+      let aMonthAgo = new Date(endDate.getTime() - 24 * 60 * 60 * 1000 * 30);
+      setStartDate(aMonthAgo);
+      aMonthBtn.current?.classList.add('active');
+      threeMonthBtn.current?.classList.remove('active');
+      aYearBtn.current?.classList.remove('active');
+      noneBtn.current?.classList.remove('active');
 
+
+    } else if (e === 'threeMonth') {
+      let threeMonthAgo = new Date(endDate.getTime() - 24 * 60 * 60 * 1000 * 30 * 3);
+      setStartDate(threeMonthAgo);
+      threeMonthBtn.current?.classList.add('active');
+      aMonthBtn.current?.classList.remove('active');
+      aYearBtn.current?.classList.remove('active');
+      noneBtn.current?.classList.remove('active');
+
+    } else if (e === 'aYear') {
+      let aYearAgo = new Date(endDate.getTime() - 24 * 60 * 60 * 1000 * 365);
+      setStartDate(aYearAgo);
+      aYearBtn.current?.classList.add('active');
+      threeMonthBtn.current?.classList.remove('active');
+      aMonthBtn.current?.classList.remove('active');
+      noneBtn.current?.classList.remove('active');
+    } else {
+      noneBtn.current?.classList.add('active');
+      setStartDate(endDate);
+      aYearBtn.current?.classList.remove('active');
+      threeMonthBtn.current?.classList.remove('active');
+      aMonthBtn.current?.classList.remove('active');
+    }
+  });
   /* 검색기간 메뉴 설정 */
   const timeUnitOptions = useMemo(
     () => [{ value: "date", label: "일간" },
     { value: "week", label: "주간" },
     { value: "month", label: "월간" },
     ], []);
+
+  /* 검색기간 메뉴 디자인 */
+  const selectStyles = {
+    option: (provided, state) => ({
+      ...provided,
+      borderBottom: '1px dotted pink',
+      color: state.isSelected ? 'red' : 'white',
+      padding: 10,
+      width: 100,
+    }),
+    control: () => ({
+      // none of react-select's styles are passed to <Control />
+      width: 100,
+    }),
+    singleValue: (provided, state) => {
+      const opacity = state.isDisabled ? 1 : 1;
+      const transition = 'opacity 300ms';
+
+      return { ...provided, opacity, transition };
+    }
+  };
+
 
   const onInputTimeUnitHandler = (value: string) => {
     setTimeUnit(value);
@@ -156,123 +208,138 @@ function Search(): ReactElement {
               clickSearch();
             }}>검색</button>
           </div>
-          <Select className="timeTab" options={timeUnitOptions} onChange={(value) => { onInputTimeUnitHandler(value.value); }} />
-          <div>
-            <DatePicker
-              renderCustomHeader={({
-                date,
-                changeYear,
-                changeMonth,
-                decreaseMonth,
-                increaseMonth,
-                prevMonthButtonDisabled,
-                nextMonthButtonDisabled,
-              }) => (
-                <div
-                  style={{
-                    margin: 10,
-                    display: "flex",
-                    justifyContent: "center",
-                  }}
-                >
-                  <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled}>
-                    {"<"}
-                  </button>
-                  <select
-                    value={getYear(date)}
-                    onChange={({ target: { value } }) => changeYear(Number(value))}
-                  >
-                    {years.map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </select>
-                  <select
-                    value={months[getMonth(date)]}
-                    onChange={({ target: { value } }) =>
-                      changeMonth(months.indexOf(value))
-                    }
-                  >
-                    {months.map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </select>
+          <div className="set-date-container">
+            <div className="set-auto-period-container">
+              <div className="set-period-btn-group">
+                <button className="aMonth" ref={aMonthBtn} onClick={() => clickTabs("aMonth")} >1개월</button>
+                <button className="threeMonth" ref={threeMonthBtn} onClick={() => clickTabs("threeMonth")} >3개월</button>
+                <button className="aYear" ref={aYearBtn} onClick={() => clickTabs("aYear")} >1년</button>
+                <button className="none" ref={noneBtn} onClick={() => clickTabs("none")} >직접 입력</button>
+              </div>
+            </div>
+            <div className="set-period-container">
+              <Select className="timeTab" options={timeUnitOptions} autosize={true} onChange={(value) => { onInputTimeUnitHandler(value.value); }} />
+            </div>
+            <div className="calendar-container">
+              <div className="start-date calendar">
+                <DatePicker
+                  renderCustomHeader={({
+                    date,
+                    changeYear,
+                    changeMonth,
+                    decreaseMonth,
+                    increaseMonth,
+                    prevMonthButtonDisabled,
+                    nextMonthButtonDisabled,
+                  }) => (
+                    <div
+                      style={{
+                        margin: 10,
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled}>
+                        {"<"}
+                      </button>
+                      <select
+                        value={getYear(date)}
+                        onChange={({ target: { value } }) => changeYear(Number(value))}
+                      >
+                        {years.map((option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
+                      <select
+                        value={months[getMonth(date)]}
+                        onChange={({ target: { value } }) =>
+                          changeMonth(months.indexOf(value))
+                        }
+                      >
+                        {months.map((option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
+                      <button onClick={increaseMonth} disabled={nextMonthButtonDisabled}>
+                        {">"}
+                      </button>
+                    </div>
+                  )}
+                  selected={startDate}
+                  onChange={handleStartDateChange}
+                  locale="ko"
+                  dateFormat="yyyy-MM-dd"
+                />
+              </div>
+              <div className="end-date calendar">
+                <DatePicker
+                  maxDate={new Date()}
+                  renderCustomHeader={({
+                    date,
+                    changeYear,
+                    changeMonth,
+                    decreaseMonth,
+                    increaseMonth,
+                    prevMonthButtonDisabled,
+                    nextMonthButtonDisabled,
+                  }) => (
+                    <div
+                      style={{
+                        margin: 10,
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled}>
+                        {"<"}
+                      </button>
+                      <select
+                        value={getYear(date)}
+                        onChange={({ target: { value } }) => changeYear(Number(value))}
+                      >
+                        {years.map((option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
+                      <select
+                        value={months[getMonth(date)]}
+                        onChange={({ target: { value } }) =>
+                          changeMonth(months.indexOf(value))
+                        }
+                      >
+                        {months.map((option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
 
-                  <button onClick={increaseMonth} disabled={nextMonthButtonDisabled}>
-                    {">"}
-                  </button>
-                </div>
-              )}
-              selected={startDate}
-              onChange={handleStartDateChange}
-              locale="ko"
-              dateFormat="yyyy-MM-dd"
-            />
+                      <button onClick={increaseMonth} disabled={nextMonthButtonDisabled}>
+                        {">"}
+                      </button>
+                    </div>
+                  )}
+                  selected={endDate}
+                  onChange={handleEndDateChange}
+                  locale="ko"
+                  dateFormat="yyyy-MM-dd"
+                />
+              </div>
+            </div>
 
           </div>
-          <div>
-            <DatePicker
-              renderCustomHeader={({
-                date,
-                changeYear,
-                changeMonth,
-                decreaseMonth,
-                increaseMonth,
-                prevMonthButtonDisabled,
-                nextMonthButtonDisabled,
-              }) => (
-                <div
-                  style={{
-                    margin: 10,
-                    display: "flex",
-                    justifyContent: "center",
-                  }}
-                >
-                  <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled}>
-                    {"<"}
-                  </button>
-                  <select
-                    value={getYear(date)}
-                    onChange={({ target: { value } }) => changeYear(Number(value))}
-                  >
-                    {years.map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </select>
-                  <select
-                    value={months[getMonth(date)]}
-                    onChange={({ target: { value } }) =>
-                      changeMonth(months.indexOf(value))
-                    }
-                  >
-                    {months.map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </select>
 
-                  <button onClick={increaseMonth} disabled={nextMonthButtonDisabled}>
-                    {">"}
-                  </button>
-                </div>
-              )}
-              selected={endDate}
-              onChange={handleEndDateChange}
-              locale="ko"
-              dateFormat="yyyy-MM-dd"
-            />
-          </div>
-          {Object.keys(openData).length > 0 ? (
+          {Object.keys(openData).length > 0 && adData.length > 0 ? (
             <div className="keyword-result-view">
               <ResultView openData={openData} keyword={keyword} adData={adData} />
             </div>
-          ) : (<>키워드와 검색 기간을 입력해주세요.</>)}
+          ) : (<div className="search-msg">네이버 통합검색에서 특정 검색어가 얼마나 많이 검색되었는지 확인해보세요.<br /></div>)}
         </div>
       </div>
     </>
