@@ -1,5 +1,4 @@
 import React, { ReactElement, useEffect, useState } from 'react';
-import { useTable } from 'react-table';
 import { KeywordListElement } from '../interfaces/interfaces';
 
 
@@ -9,6 +8,7 @@ interface Props {
 
 function HintKeywordsTable(props: Props) {
   const { adData } = props;
+
   const topData = adData.map((el) => ({
     relKeyword: el.relKeyword,
     monthlyPcQcCnt: el.monthlyPcQcCnt,
