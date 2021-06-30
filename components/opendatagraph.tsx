@@ -15,7 +15,16 @@ function openDataGraph(props: Props): ReactElement {
   const ratioArray = [];
   resultData.results[0].data.forEach((el) => ratioArray.push(Math.round(el.ratio)));
   const data = {
+
     options: {
+      dataLabels: {
+        enabled: true,
+        style: {
+          fontSize: '12px',
+          fontWeight: 'bold',
+        },
+
+      },
       chart: {
         width: "300px",
         zoom: {
