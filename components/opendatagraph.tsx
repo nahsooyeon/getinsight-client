@@ -30,6 +30,28 @@ function openDataGraph(props: Props): ReactElement {
         max: 100
       },
 
+      responsive: [
+        {
+          breakpoint: 900,
+          options: {
+            chart: {
+              type: "line",
+              height: "200px",
+            },
+          },
+        },
+        {
+          breakpoint: 375,
+          options: {
+            chart: {
+              width: "300px",
+              height: "300px",
+              type: "line",
+            },
+          },
+        },
+      ],
+
     },
     series: [
       {

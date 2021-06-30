@@ -9,6 +9,7 @@ interface Props {
 
 function DeviceGraph(props: Props): ReactElement {
   const { resultData } = props;
+
   const data = {
     chart: {
       type: "pie",
@@ -33,6 +34,28 @@ function DeviceGraph(props: Props): ReactElement {
         show: true,
         position: "bottom"
       },
+      responsive: [
+        {
+          breakpoint: 900,
+          options: {
+            chart: {
+              width: "200px",
+              height: "200px",
+              type: "pie",
+            },
+          },
+        },
+        {
+          breakpoint: 375,
+          options: {
+            chart: {
+              width: "90px",
+              height: "90px",
+              type: "pie",
+            },
+          },
+        },
+      ],
     },
     series: [
       resultData.monthlyPcQcCnt, resultData.monthlyMobileQcCnt
