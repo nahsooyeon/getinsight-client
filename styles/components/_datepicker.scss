@@ -84,17 +84,51 @@
   display: inline-block;
   padding: 0;
   border: 0;
+  & > .react-datepicker__input-container {
+    & > input {
+      height: 2rem;
+      font-family: $font-main;
+      text-align: center;
+      font-size: 1rem;
+      border: $border 1px solid;
+      border-radius: 8px;
+      color: $blue;
+    }
+  }
 }
 
 .react-datepicker {
-  font-family: 'Helvetica Neue', helvetica, arial, sans-serif;
+  font-family: $font-main;
   font-size: 0.8rem;
   background-color: #fff;
-  color: #000;
+  color: $primary;
   border: 1px solid #aeaeae;
   border-radius: 0.3rem;
   display: inline-block;
   position: relative;
+
+  & > div.react-datepicker__month-container {
+    background-color: #fff;
+
+    & > div.react-datepicker__header.react-datepicker__header--custom {
+      background-color: $blue;
+
+      & > div {
+        & > select {
+          font-size: $font-size-13;
+          color: $primary;
+          width: 5rem;
+          text-align: center;
+        }
+      }
+
+      & > div.react-datepicker__day-names {
+        & > div.react-datepicker__day-name {
+          color: #fff;
+        }
+      }
+    }
+  }
 }
 
 .react-datepicker--time-only .react-datepicker__triangle {
