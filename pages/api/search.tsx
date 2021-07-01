@@ -15,19 +15,6 @@ export default async function handler(req: Request, res: Response) {
   }
 }
 
-const dummy = {
-  "startDate": "2021-01-01",
-  "endDate": "2021-02-01",
-  "timeUnit": "date",
-  "keywordGroups": [
-    {
-      "groupName": "운동화",
-      "keywords": [
-        "운동화"
-      ]
-    }
-  ]
-};
 
 /**  TODO: response interface 만들기
 const resData = {
