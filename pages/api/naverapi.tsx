@@ -3,7 +3,7 @@ import axios from 'axios';
 import { KeywordBody, KeywordResult } from '../../interfaces/interfaces';
 import { Request, Response } from 'express';
 import CryptoJS from "crypto-js";
-
+import Logger from "../../commons/Logger";
 
 /* API 요청 클래스*/
 
@@ -12,7 +12,7 @@ const datalabURL = 'https://openapi.naver.com/v1/datalab/search';
 const searchADURL = 'https://api.naver.com/keywordstool?hintKeywords=';
 
 /* 요청하는 API 소스에 따라 달라지는 헤더 호출 함수 */
-const createHeaders = (type: string) => {
+export const createHeaders = (type: string) => {
   let headers = {};
   if (type === 'datalab') {
     headers = {
@@ -47,8 +47,7 @@ export const datalabSearch = async (data: KeywordBody) => {
     const response = await axios.post(datalabURL, JSON.stringify(data), { headers: createHeaders('datalab') });
     result = response.data;
   } catch (error) {
-
-    console.error(error);
+    Logger.error(error);
   }
   return result;
 };
@@ -57,14 +56,37 @@ export const datalabSearch = async (data: KeywordBody) => {
 export const adSearch = async (data: string) => {
   let result;
   try {
+    const headers = createHeaders('adSearch');
     const response = await axios.get(
       'https://api.naver.com/keywordstool?hintKeywords=' + encodeURI(data) + '&showDetail=1',
-      createHeaders('adSearch')
+      { headers: headers }
     );
-    result = response;
+    result = response.data;
   } catch (error) {
-    console.log(error);
+    Logger.error(error);
   }
   return result;
-
 };
+
+
+/* 쇼핑인사이트 카테고리별 트렌드 조회  */
+
+export const shoppingCategorySearch = async (data: KeywordBody) => {
+  let result;
+  try {
+    const headers = createHeaders('datalab');
+
+  } catch (error) {
+    Logger.error(error);
+  }
+  return result;
+};
+/* 키워드 입력 */
+/* 요청값 인터페이스 작성 */
+
+
+/* 쇼핑인사이트 키워드별 트렌드 조회 */
+
+export const shoppingKeywordSearch = async (data: KeywordBody) => {
+  
+}
