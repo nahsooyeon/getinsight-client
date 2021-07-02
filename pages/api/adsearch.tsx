@@ -1,51 +1,19 @@
-import axios from 'axios';
-import { Request, Response } from 'express';
-import CryptoJS from "crypto-js";
-
-
-
-
+import { adSearch } from "./naverapi";
+import Logger from "../../commons/Logger";
+import { Request, Response } from "express";
 
 export default async function handler(req: Request, res: Response) {
-  if (req.method === 'POST') {
-    const result = await adKeywordSearch(req.body.keyword);
-    res.status(200).json(result.data);
-
-  } else {
-    res.status(403).json({ success: false });
-  }
-
-}
-
-const adKeywordSearch = async (data: string) => {
-  const api_url = "/keywordstool";
-  const method = "GET";
-  const timestamp = Date.now() + '';
-  const hmac = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA256, process.env.NAVER_SERACHAD_SECRET);
-  hmac.update(timestamp + '.' + method + '.' + api_url);
-  let hash = hmac.finalize();
-  hash.toString(CryptoJS.enc.Base64);
-  const headers = {
-    'X-timestamp': timestamp,
-    'X-API-KEY': process.env.NAVER_SEARCHAD_ACCESS,
-    'X-API-SECRET': process.env.NAVER_SERACHAD_SECRET,
-    'X-CUSTOMER': process.env.NAVER_SERACHAD_ID,
-    'X-Signature': hash.toString(CryptoJS.enc.Base64),
-
-  };
-  let result;
   try {
-    const response = await axios.get('https://api.naver.com/keywordstool?hintKeywords=' + encodeURI(data) + '&showDetail=1', {
-      headers: headers,
-    });
-    result = response;
-
+    if (req.method === 'POST') {
+      const result = await adSearch(req.body.keyword);
+      res.status(200).send({ result });
+    } else {
+      res.status(403).json({ success: false });
+    }
   } catch (error) {
-    console.log(error);
+    Logger.error(error);
+    res.status(404).json({ success: false });
   }
-  return result;
-};
-
-
+}
 
 
