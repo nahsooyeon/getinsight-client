@@ -10,12 +10,9 @@ registerLocale("ko", ko);
 import getYear from "date-fns/getYear";
 import getMonth from "date-fns/getMonth";
 import range from "lodash/range";
-import ApiController from "./api/naverapi";
 
 import api from "../commons/apiUtil";
 import { KeywordBody, KeywordResult, KeywordListElement } from '../interfaces/interfaces';
-
-
 
 
 const Now = new Date();
@@ -83,29 +80,26 @@ function Search(): ReactElement {
   /* 데이터랩 api 요청 함수 */
   const searchData = async (data: KeywordBody) => {
     const result = await api({
-      method: "post",
+      method: "POST",
       url: "search",
       data
     });
-    setOpenData(result.data);
-
+    setOpenData(result.data.result);
   };
 
   /* 검색광고 api 요청 함수 */
   const adSearchData = async (data: adKeywordBody) => {
     const result = await api({
-      method: "post",
+      method: "POST",
       url: "adsearch",
       data
     });
-
-    setAdData(result.data.keywordList);
+    setAdData(result.data.result.keywordList);
   };
 
   /* 검색어 클릭 함수*/
   const clickSearch = async () => {
     /* 한 정보라도 빠져있다면 에러 발생! */
-    /*  */
     const requestData = {
       startDate: getFormatDate(startDate),
       endDate: getFormatDate(endDate),
@@ -169,32 +163,10 @@ function Search(): ReactElement {
     { value: "month", label: "월간" },
     ], []);
 
-  /* 검색기간 메뉴 디자인 */
-  const selectStyles = {
-    option: (provided, state) => ({
-      ...provided,
-      borderBottom: '1px dotted pink',
-      color: state.isSelected ? 'red' : 'white',
-      padding: 10,
-      width: 100,
-    }),
-    control: () => ({
-      // none of react-select's styles are passed to <Control />
-      width: 100,
-    }),
-    singleValue: (provided, state) => {
-      const opacity = state.isDisabled ? 1 : 1;
-      const transition = 'opacity 300ms';
-
-      return { ...provided, opacity, transition };
-    }
-  };
-
 
   const onInputTimeUnitHandler = (value: string) => {
     setTimeUnit(value);
   };
-
 
   return (
     <>
