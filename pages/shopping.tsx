@@ -33,6 +33,7 @@ function Shopping(): ReactElement {
   const [endDate, setEndDate] = useState<Date>(new Date(Now.getTime() - 24 * 60 * 60 * 1000));
   const [timeUnit, setTimeUnit] = useState('');
 
+
   const [openData, setOpenData] = useState<KeywordResult>({});
   const [adData, setAdData] = useState<KeywordListElement[]>([]);
   const keywordInput = useRef<HTMLInputElement>(null);
@@ -42,6 +43,11 @@ function Shopping(): ReactElement {
   const aYearBtn = useRef<HTMLButtonElement>(null);
   const noneBtn = useRef<HTMLButtonElement>(null);
 
+  const parentCategory = useRef<Select>(null);
+  const childCategory = useRef<Select>(null);
+
+  const [parentValue, setParentValue] = useState('');
+  const [childValue, setChildValue] = useState('');
 
 
   interface adKeywordBody {
@@ -54,6 +60,17 @@ function Shopping(): ReactElement {
   }) => {
     setKeyword(e.target.value);
   };
+
+  const onParentValueHandler = (value: string) => {
+    setParentValue(value);
+  };
+
+  const onChildValueHandler = (value: string) => {
+    setChildValue(value);
+  };
+
+
+
   /* 날짜 정보 설정 함수 */
   const handleStartDateChange = (date: Date, _event: React.SyntheticEvent<any, Event>) => {
     setStartDate(date);
@@ -168,9 +185,29 @@ function Shopping(): ReactElement {
     setTimeUnit(value);
   };
 
+  /* 카테고리 메뉴 설정 */
+  const parentOptions = useMemo(
+    () => [{ value: "50000000", label: "패션의류" },
+    { value: "50000001", label: "패션잡화" },
+    { value: "50000002", label: "화장품/미용" },
+    { value: "50000003", label: "디지털/가전" },
+    { value: "50000004", label: "가구/인테리어" },
+    { value: "50000005", label: "패션의류" },
+    { value: "50000006", label: "식품" },
+    { value: "50000007", label: "스포츠/레저" },
+    { value: "50000008", label: "생활/건강" },
+    { value: "50000009", label: "여가/생활편의" },
+    { value: "50000010", label: "패션잡화" },
+    { value: "50000011", label: "면세점" }
+
+    ], []);
+
+
+
+
   return (
     <>
-      <div className="search-page-view">
+      <div className="shopping-page-view">
         <Nav />
         <div className="search-container">
           <h1>쇼핑 트렌드 분석 서비스</h1>
@@ -188,10 +225,11 @@ function Shopping(): ReactElement {
                 <button className="aYear" ref={aYearBtn} onClick={() => clickTabs("aYear")} >1년</button>
                 <button className="none" ref={noneBtn} onClick={() => clickTabs("none")} >직접 입력</button>
               </div>
+              <div className="set-period-container">
+                <Select className="timeTab" options={timeUnitOptions} autosize={true} onChange={(value) => { onInputTimeUnitHandler(value.value); }} />
+              </div>
             </div>
-            <div className="set-period-container">
-              <Select className="timeTab" options={timeUnitOptions} autosize={true} onChange={(value) => { onInputTimeUnitHandler(value.value); }} />
-            </div>
+
             <div className="calendar-container">
               <div className="start-date calendar">
                 <DatePicker
@@ -304,14 +342,20 @@ function Shopping(): ReactElement {
                 />
               </div>
             </div>
-
+            <div className="category-container">
+              <label>분야</label>
+              <div className="category-group">
+                <Select className="category-parent" width='200px' ref={parentCategory} options={parentOptions} placeholder="1분류" onChange={(value) => { onParentValueHandler(value.value); }}></Select>
+                <Select className="category-child" width='200px' ref={childCategory} placeholder="2분류" onChange={(value) => { onChildValueHandler(value.value); }}> </Select>
+              </div>
+            </div>
           </div>
 
           {Object.keys(openData).length > 0 && adData.length > 0 ? (
             <div className="keyword-result-view">
               <ResultView openData={openData} keyword={keyword} adData={adData} />
             </div>
-          ) : (<div className="search-msg">네이버 통합검색에서 특정 검색어가 얼마나 많이 검색되었는지 확인해보세요.<br /></div>)}
+          ) : (<div className="search-msg">네이버 통합검색의 쇼핑 영역과 네이버쇼핑에서의 트렌드를 확인해보세요<br /></div>)}
         </div>
       </div>
     </>
