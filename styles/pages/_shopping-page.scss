@@ -1,0 +1,217 @@
+@import url('https://fonts.googleapis.com/css?family=Lato');
+* {
+  font-family: $font-main;
+}
+.shopping-page-view {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  .search-msg {
+    position: relative;
+    top: 50%;
+    align-self: center;
+    text-align: center;
+    line-height: 2.5rem;
+  }
+
+  .search-container {
+    display: flex;
+    flex-direction: column;
+
+    & > .timeTab {
+      width: 10rem;
+    }
+    h1 {
+      text-align: center;
+      margin-top: 3rem;
+    }
+
+    & > .set-date-container {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 3rem;
+
+      & > .set-auto-period-container {
+        display: flex;
+        justify-content: center;
+
+        & > .set-period-btn-group {
+          display: flex;
+          width: 300px;
+          flex-wrap: wrap;
+          justify-content: space-evenly;
+          align-items: center;
+          & > button {
+            height: 2rem;
+            border: 0;
+            outline: 0;
+            border-radius: 10px;
+            text-align: center;
+            padding: 0 10 0 10;
+          }
+          & > button.active {
+            height: 2rem;
+            background: $blue;
+            color: $tertiary;
+            padding: 0 10 0 10;
+          }
+        }
+      }
+      & > .set-period-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        & > .timeTab.css-2b097c-container {
+          height: 2rem;
+
+          & > div {
+            width: 100px;
+            font-size: $font-size-14;
+            color: $gray;
+          }
+
+          & > div.css-yk16xz-control {
+            width: 100px;
+
+            & > div.css-g1d714-ValueContainer {
+              & > div.css-1wa3eu0-placeholder {
+              }
+            }
+          }
+        }
+      }
+
+      & .calendar-container {
+        display: flex;
+        flex-wrap: wrap;
+        height: 5rem;
+        align-items: center;
+        justify-content: center;
+        width: auto;
+        padding: 0 10px 0 10px;
+      }
+
+      & .category-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        & > .category-group {
+          & > label {
+            font-weight: 100;
+          }
+
+          display: flex;
+          // flex-wrap: wrap;
+          justify-content: space-evenly;
+          & > * {
+            width: 200px;
+            height: auto;
+          }
+        }
+      }
+    }
+
+    & > .search-input-bar {
+      display: flex;
+      align-self: center;
+      input.keyword-input {
+        width: 15rem;
+        height: 3rem;
+        text-align: center;
+        color: $primary;
+        font-size: 1.2rem;
+
+        border-radius: 8px;
+      }
+      .search-btn {
+        /* Button/Primary/Default */
+        width: 7rem;
+        height: 3rem;
+        border: 0;
+        outline: 0;
+        margin-left: 0.5rem;
+        /* Rectangle */
+
+        left: 0%;
+        right: 0%;
+        top: 0%;
+        bottom: 0%;
+
+        /* Blue */
+        background: $blue;
+        border-radius: 8px;
+
+        /* 검색 */
+
+        left: 31.33%;
+        right: 31.33%;
+        top: 32.08%;
+        bottom: 28.3%;
+
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 19px;
+        text-align: center;
+        color: $tertiary;
+      }
+    }
+  }
+}
+
+.keyword-result-view {
+  display: flex;
+  flex-direction: column;
+  .result-view-container {
+    display: flex;
+    flex-direction: column;
+    & > .result-graph-container {
+      display: flex;
+      flex-direction: row;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      & > div {
+        align-content: center;
+      }
+    }
+    & > .hintKeywords {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      & > .title {
+        font-size: 1.5rem;
+        padding: 2rem;
+      }
+      & > .hint-keywords-table {
+        table > thead {
+          background-color: $blue;
+          color: $tertiary;
+          margin-bottom: 1rem;
+          tr > th {
+            padding: 0.5rem;
+            margin-right: 0;
+            font-weight: 100;
+            margin-bottom: 3rem;
+          }
+        }
+        table > tbody {
+          margin-top: 30px;
+          tr {
+            margin: 2rem;
+            font-weight: 200;
+            td {
+              padding: 10px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
