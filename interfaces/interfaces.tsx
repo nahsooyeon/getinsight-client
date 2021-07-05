@@ -1,8 +1,8 @@
-export interface KeywordBody {
+export interface SearchBody {
   startDate?: string;
   endDate?: string;
   timeUnit?: string;
-  category?: string;
+  category?: string | categoryInfo[];
   keywordGroups?: keywordGroups[];
   keyword?: categoryInfo[];
   device?: string;
@@ -18,6 +18,7 @@ export interface categoryInfo {
   name: string;
   param: string[];
 }
+
 
 export interface KeywordResult {
   startDate?: string,
@@ -49,4 +50,24 @@ export interface KeywordListElement {
   plAvgDepth?: number,
   compIdx?: string;
 
+}
+
+export interface ShoppingTrend {
+  startdate?: string,
+  endDate?: string,
+  timeUnit?: string,
+  results?: ShoppingGroupResult[];
+}
+
+export interface ShoppingGroupResult {
+  title?: string,
+  category?: string[],
+  data?: searchElement[];
+}
+
+export interface ProductCrawlData {
+  title: string;
+  price: string;
+  review: string;
+  like: string;
 }
