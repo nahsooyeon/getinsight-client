@@ -12,7 +12,7 @@ import getMonth from "date-fns/getMonth";
 import range from "lodash/range";
 
 import api from "../commons/apiUtil";
-import { KeywordBody, KeywordResult, KeywordListElement } from '../interfaces/interfaces';
+import { SearchBody, KeywordResult, KeywordListElement } from '../interfaces/interfaces';
 
 
 const Now = new Date();
@@ -95,7 +95,7 @@ function Shopping(): ReactElement {
   ];
 
   /* 데이터랩 api 요청 함수 */
-  const searchData = async (data: KeywordBody) => {
+  const searchData = async (data: SearchBody) => {
     const result = await api({
       method: "POST",
       url: "search",

@@ -12,7 +12,7 @@ import getMonth from "date-fns/getMonth";
 import range from "lodash/range";
 
 import api from "../commons/apiUtil";
-import { KeywordBody, KeywordResult, KeywordListElement } from '../interfaces/interfaces';
+import { SearchBody, KeywordResult, KeywordListElement } from '../interfaces/interfaces';
 
 
 const Now = new Date();
@@ -35,7 +35,6 @@ function Search(): ReactElement {
 
   const [openData, setOpenData] = useState<KeywordResult>({});
   const [adData, setAdData] = useState<KeywordListElement[]>([]);
-  const keywordInput = useRef<HTMLInputElement>(null);
 
   const aMonthBtn = useRef<HTMLButtonElement>(null);
   const threeMonthBtn = useRef<HTMLButtonElement>(null);
@@ -78,7 +77,7 @@ function Search(): ReactElement {
   ];
 
   /* 데이터랩 api 요청 함수 */
-  const searchData = async (data: KeywordBody) => {
+  const searchData = async (data: SearchBody) => {
     const result = await api({
       method: "POST",
       url: "search",
@@ -175,7 +174,7 @@ function Search(): ReactElement {
         <div className="search-container">
           <h1>키워드 검색 서비스</h1>
           <div className="search-input-bar">
-            <input type="text" className="keyword-input" ref={keywordInput} onChange={onInputKeywordHandler} placeholder={"키워드를 입력하세요"} />
+            <input type="text" className="keyword-input" onChange={onInputKeywordHandler} placeholder={"키워드를 입력하세요"} />
             <button type="button" className="search-btn" onClick={() => {
               clickSearch();
             }}>검색</button>
