@@ -30,10 +30,7 @@ function DeviceGraph(props: Props): ReactElement {
           fontColor: "black",
         },
       },
-      legend: {
-        show: true,
-        position: "bottom"
-      },
+
       responsive: [
         {
           breakpoint: 900,

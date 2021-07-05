@@ -7,7 +7,7 @@ import Logger from "../../commons/Logger";
 
 
 /* URL 종류 */
-const datalabURL = 'https://openapi.naver.com/v1/datalab';
+const datalabURL = 'https://openapi.naver.com/v1/datalab/';
 const searchADURL = 'https://api.naver.com/';
 
 /* 요청하는 API 소스에 따라 달라지는 헤더 호출 함수 */
@@ -49,7 +49,7 @@ export const datalabSearch = async (data: SearchBody) => {
       url: 'search',
       method: 'POST',
       headers: headers,
-      data
+      data,
     });
     result = response.data;
   } catch (error) {
@@ -92,7 +92,7 @@ export const shoppingCategorySearch = async (data: SearchBody) => {
       baseURL: datalabURL,
       url: 'shopping/categories',
       method: 'POST',
-      data,
+      data: data,
       headers: headers
     });
     result = response.data;
