@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "upload": "rm -rf log && serverless"
+    "upload": "rm -rf log && serverless",
+    "bns": "npm run build && npm run start",
+    "pm2:start": "npm run build && pm2 start -n getinsight \"yarn start\" ",
+    "pm2:stop": "pm2 delete getinsight"
   },
   "dependencies": {
     "@next/bundle-analyzer": "^11.0.0",
