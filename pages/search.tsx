@@ -31,7 +31,7 @@ function Search(): ReactElement {
   const [startDate, setStartDate] = useState<Date>(new Date(Now.getTime() - 24 * 60 * 60 * 1000 * 2));
 
   const [endDate, setEndDate] = useState<Date>(new Date(Now.getTime() - 24 * 60 * 60 * 1000));
-  const [timeUnit, setTimeUnit] = useState('');
+  const [timeUnit, setTimeUnit] = useState('month');
 
   const [openData, setOpenData] = useState<KeywordResult>({});
   const [adData, setAdData] = useState<KeywordListElement[]>([]);
@@ -40,8 +40,7 @@ function Search(): ReactElement {
   const threeMonthBtn = useRef<HTMLButtonElement>(null);
   const aYearBtn = useRef<HTMLButtonElement>(null);
   const noneBtn = useRef<HTMLButtonElement>(null);
-
-
+  const keywordInput = useRef<HTMLInputElement>(null);
 
   interface adKeywordBody {
     keyword: string;
@@ -52,6 +51,16 @@ function Search(): ReactElement {
     target: { value: React.SetStateAction<string>; };
   }) => {
     setKeyword(e.target.value);
+
+  };
+
+  /* 키워드 입력 상태에서 엔터 클릭 시 검색 */
+  const enterHandler = (e) => {
+    if (e.key === 'Enter') {
+      setKeyword(e.target.value);
+      clickSearch();
+    }
+
   };
   /* 날짜 정보 설정 함수 */
   const handleStartDateChange = (date: Date, _event: React.SyntheticEvent<any, Event>) => {
@@ -133,8 +142,6 @@ function Search(): ReactElement {
       threeMonthBtn.current?.classList.remove('active');
       aYearBtn.current?.classList.remove('active');
       noneBtn.current?.classList.remove('active');
-
-
     } else if (e === 'threeMonth') {
       let threeMonthAgo = new Date(endDate.getTime() - 24 * 60 * 60 * 1000 * 30 * 3);
       setStartDate(threeMonthAgo);
@@ -165,6 +172,26 @@ function Search(): ReactElement {
     { value: "month", label: "월간" },
     ], []);
 
+  const timeUnitStyles = useMemo(
+    () => ({
+      option: (provided, state) => ({
+        ...provided,
+        color: state.isSelected ? 'white' : '#4263EB',
+        opacity: 0.8,
+      }),
+      control: (provided, state) => ({
+        ...provided,
+        width: 200,
+        background: '#4263EB',
+        color: 'white',
+      }),
+      singleValue: (provided, state) => ({
+        ...provided,
+        color: 'white',
+      }),
+
+    }), []);
+
 
   const onInputTimeUnitHandler = (value: string) => {
     setTimeUnit(value);
@@ -177,7 +204,7 @@ function Search(): ReactElement {
         <div className="search-container">
           <h1>키워드 검색 서비스</h1>
           <div className="search-input-bar">
-            <input type="text" className="keyword-input" onChange={onInputKeywordHandler} placeholder={"키워드를 입력하세요"} />
+            <input type="text" className="keyword-input" ref={keywordInput} onChange={onInputKeywordHandler} placeholder={"키워드를 입력하세요"} onKeyPress={enterHandler} />
             <button type="button" className="search-btn" onClick={() => {
               clickSearch();
             }}>검색</button>
@@ -185,14 +212,14 @@ function Search(): ReactElement {
           <div className="set-date-container">
             <div className="set-auto-period-container">
               <div className="set-period-btn-group">
-                <button className="aMonth" ref={aMonthBtn} onClick={() => clickTabs("aMonth")} >1개월</button>
+                <button className="aMonth active" ref={aMonthBtn} onClick={() => clickTabs("aMonth")}  >1개월</button>
                 <button className="threeMonth" ref={threeMonthBtn} onClick={() => clickTabs("threeMonth")} >3개월</button>
                 <button className="aYear" ref={aYearBtn} onClick={() => clickTabs("aYear")} >1년</button>
                 <button className="none" ref={noneBtn} onClick={() => clickTabs("none")} >직접 입력</button>
               </div>
             </div>
             <div className="set-period-container">
-              <Select className="timeTab" options={timeUnitOptions} autosize={true} onChange={(value) => { onInputTimeUnitHandler(value.value); }} />
+              <Select className="timeTab" options={timeUnitOptions} autosize={true} defaultValue={{ value: "date", label: "일간" }} styles={timeUnitStyles} onChange={(value) => { onInputTimeUnitHandler(value.value); }} />
             </div>
             <div className="calendar-container">
               <div className="start-date calendar">
