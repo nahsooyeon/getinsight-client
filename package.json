@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "upload": "rm -rf log && serverless"
+    "upload": "rm -rf log && serverless",
+    "bns": "npm run build && npm run start",
+    "pm2:start": "npm run build && pm2 start -n getinsight \"yarn start\" ",
+    "pm2:stop": "pm2 delete getinsight"
   },
   "dependencies": {
     "@next/bundle-analyzer": "^11.0.0",
@@ -20,6 +23,7 @@
     "express": "^4.17.1",
     "next": "10.2.3",
     "next-env": "^1.1.1",
+    "puppeteer": "^10.1.0",
     "react": "17.0.2",
     "react-apexcharts": "^1.3.9",
     "react-datepicker": "^4.1.1",
