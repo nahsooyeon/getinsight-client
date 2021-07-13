@@ -46,8 +46,7 @@ function Shopping(): ReactElement {
   const parentCategory = useRef<Select>(null);
   const childCategory = useRef<Select>(null);
 
-  const [parentValue, setParentValue] = useState('');
-  const [childValue, setChildValue] = useState('');
+  const [categoryValue, setCategoryValue] = useState('');
 
 
   interface adKeywordBody {
@@ -62,11 +61,11 @@ function Shopping(): ReactElement {
   };
 
   const onParentValueHandler = (value: string) => {
-    setParentValue(value);
+    setCategoryValue(value);
   };
 
   const onChildValueHandler = (value: string) => {
-    setChildValue(value);
+    setCategoryValue(value);
   };
 
 
@@ -185,7 +184,7 @@ function Shopping(): ReactElement {
     setTimeUnit(value);
   };
 
-  /* 카테고리 메뉴 설정 */
+  /* 1차 카테고리 메뉴 설정 */
   const parentOptions = useMemo(
     () => [{ value: "50000000", label: "패션의류" },
     { value: "50000001", label: "패션잡화" },
@@ -201,6 +200,47 @@ function Shopping(): ReactElement {
     { value: "50000011", label: "면세점" }
 
     ], []);
+
+  const childOptions =
+    [
+      { value: "50000167", label: "여성의류", link: "50000000" },
+      { value: "50000168", label: "여성언더웨어/잠옷", link: "50000000" },
+      { value: "50000169", label: "남성의류", link: "50000000" },
+      { value: "50000170", label: "남성언더웨어/잠옷", link: "50000000" },
+
+      { value: "50000173", label: "여성신발", link: "50000001" },
+      { value: "50000174", label: "남성신발", link: "50000001" },
+      { value: "50000175", label: "신발용품", link: "50000001" },
+      { value: "50000176", label: "여성가방", link: "50000001" },
+      { value: "50000177", label: "남성가방", link: "50000001" },
+      { value: "50000178", label: "여행용가방/소품", link: "50000001" },
+      { value: "50000179", label: "지갑", link: "50000001" },
+      { value: "50000180", label: "벨트", link: "50000001" },
+      { value: "50000181", label: "모자", link: "50000001" },
+      { value: "50000182", label: "장갑", link: "50000001" },
+      { value: "50000183", label: "양말", link: "50000001" },
+      { value: "50000184", label: "선글라스/안경테", link: "50000001" },
+      { value: "50000185", label: "헤어액세서리", link: "50000001" },
+      { value: "50000186", label: "패션소품", link: "50000001" },
+      { value: "50000187", label: "시계", link: "50000001" },
+      { value: "50000188", label: "순금", link: "50000001" },
+      { value: "50000189", label: "주얼리", link: "50000001" },
+
+      { value: "50000190", label: "스킨케어", link: "50000002" },
+      { value: "50000194", label: "베이스메이크업", link: "50000002" },
+      { value: "50000195", label: "색조메이크업", link: "50000002" },
+      { value: "50000192", label: "클렌징", link: "50000002" },
+      { value: "50000193", label: "마스크/팩", link: "50000002" },
+      { value: "50000191", label: "선케어", link: "50000002" },
+      { value: "50000202", label: "남성화장품", link: "50000002" },
+      { value: "50000200", label: "향수", link: "50000002" },
+      { value: "50000197", label: "바디케어", link: "50000002" },
+      { value: "50000198", label: "헤어케어", link: "50000002" },
+      { value: "50000199", label: "헤어스타일링", link: "50000002" },
+      { value: "50000196", label: "네일케어", link: "50000002" },
+      { value: "50000201", label: "뷰티소품", link: "50000002" },
+    ];
+
 
 
 
@@ -346,7 +386,7 @@ function Shopping(): ReactElement {
               <label>분야</label>
               <div className="category-group">
                 <Select className="category-parent" width='200px' ref={parentCategory} options={parentOptions} placeholder="1분류" onChange={(value) => { onParentValueHandler(value.value); }}></Select>
-                <Select className="category-child" width='200px' ref={childCategory} placeholder="2분류" onChange={(value) => { onChildValueHandler(value.value); }}> </Select>
+                <Select className="category-child" width='200px' ref={childCategory} placeholder="2분류" onChange={(value) => { onChildValueHandler(value.value); }} > </Select>
               </div>
             </div>
           </div>
