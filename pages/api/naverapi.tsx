@@ -92,7 +92,7 @@ export const shoppingCategorySearch = async (data: SearchBody) => {
       baseURL: datalabURL,
       url: 'shopping/categories',
       method: 'POST',
-      data: data,
+      data,
       headers: headers
     });
     result = response.data;
@@ -107,15 +107,38 @@ export const shoppingCategorySearch = async (data: SearchBody) => {
 export const shoppingTrendDeviceSearch = async (data: SearchBody) => {
   let result;
   try {
-
-
+    const headers = createHeaders('datalab');
+    const response = await axios({
+      baseURL: datalabURL,
+      url: 'shopping/category/device',
+      method: 'POST',
+      data,
+      headers: headers
+    });
+    result = response.data;
   } catch (error) {
-
+    Logger.error(error);
   }
   return result;
 };
 
 /* 쇼핑인사이트 카테고리 내 성별 트렌드 조회 */
+
+export const shoppingTrendGenderSearch = async (data: SearchBody) => {
+  let result;
+  try {
+    const headers = createHeaders('datalab');
+    const response = await axios({
+      baseURL: datalabURL,
+      url: 'shopping/category/gender',
+      method: 'POST',
+      data,
+    });
+  } catch (error) {
+    Logger.error(error);
+  }
+  return result;
+};
 
 /* 쇼핑인사이트 키워드별 트렌드 조회 */
 
