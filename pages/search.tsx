@@ -83,7 +83,6 @@ function Search(): ReactElement {
       url: "search",
       data
     });
-    console.log(result.data.result);
     setOpenData(result.data.result);
   };
 
@@ -94,7 +93,6 @@ function Search(): ReactElement {
       url: "adsearch",
       data
     });
-    console.log(result.data.result);
 
     setAdData(result.data.result.keywordList);
   };
