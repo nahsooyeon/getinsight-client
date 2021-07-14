@@ -37,7 +37,7 @@
     "@types/crypto-js": "^4.0.1",
     "@types/date-fns": "^2.6.0",
     "@types/express": "^4.17.12",
-    "@types/node": "^15.12.2",
+    "@types/node": "^16.3.2",
     "@types/puppeteer": "^5.4.3",
     "@types/react": "^17.0.11",
     "@types/react-datepicker": "^3.1.8",
