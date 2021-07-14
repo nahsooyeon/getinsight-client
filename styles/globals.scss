@@ -1,13 +1,16 @@
 @import './constants/colors';
 @import './constants/typography';
 
-@import './components/nav';
+@import './components/analysis-nav';
+@import './components/main-nav';
 @import './components/datepicker';
 
 html,
 body {
-  padding: 0;
   margin: 0;
+  padding-left: 5%;
+  padding-right: 5%;
+  padding-top: 1%;
   font-family: $font-main, sans-serif;
 }
 
@@ -23,3 +26,5 @@ a {
 @import './Home.module.scss';
 @import './pages/search-page';
 @import './pages/shopping-page';
+@import './pages/signup-page';
+@import './pages/signin-page';
