@@ -1,0 +1,42 @@
+.login-page-view {
+  margin-top: 10%;
+  border: 1px solid black;
+  .login-container {
+    display: flex;
+    flex-direction: column;
+    .intro-login {
+      .title-login {
+        font-size: $font-size-24;
+        text-align: center;
+      }
+      .subtitle-login {
+        font-size: $font-size-16;
+        text-align: center;
+        line-height: $line-height-16;
+      }
+    }
+    .group-login {
+      .input-group-login {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        input {
+          cursor: text;
+          align-items: center;
+          overflow: hidden;
+          letter-spacing: normal;
+          word-spacing: normal;
+          text-transform: none;
+          text-indent: 0px;
+          text-shadow: none;
+          display: inline-block;
+          text-align: start;
+        }
+        .input-email {
+        }
+        .input-password {
+        }
+      }
+    }
+  }
+}
