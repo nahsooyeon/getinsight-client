@@ -2,10 +2,10 @@ import React, { ReactElement, useRef, useState, useEffect, useMemo } from 'react
 import ResultView from '../components/resultview';
 // import "../styles/components/_datepicker.scss";
 import Select from "react-select";
-import Nav from "../components/nav";
 import DatePicker, { registerLocale } from "react-datepicker";
 import { ko } from 'date-fns/locale';
 registerLocale("ko", ko);
+import MainNav from '../components/mainnav';
 
 import getYear from "date-fns/getYear";
 import getMonth from "date-fns/getMonth";
@@ -28,8 +28,7 @@ function Search(): ReactElement {
 
   /* 메인 검색어, 하위 검색어, 시작 날짜, 끝날짜, 시간 단위 */
   const [keyword, setKeyword] = useState('');
-  const [startDate, setStartDate] = useState<Date>(new Date(Now.getTime() - 24 * 60 * 60 * 1000 * 2));
-
+  const [startDate, setStartDate] = useState<Date>(new Date(Now.getTime() - 24 * 60 * 60 * 1000 * 30));
   const [endDate, setEndDate] = useState<Date>(new Date(Now.getTime() - 24 * 60 * 60 * 1000));
   const [timeUnit, setTimeUnit] = useState('month');
 
@@ -197,8 +196,9 @@ function Search(): ReactElement {
 
   return (
     <>
+      <div className="logo-image">겟인사이트로고</div>
+      <MainNav />
       <div className="search-page-view">
-        <Nav />
         <div className="search-container">
           <h1>키워드 검색 서비스</h1>
           <div className="search-input-bar">

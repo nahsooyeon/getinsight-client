@@ -2,7 +2,6 @@ import React, { ReactElement, useRef, useState, useEffect, useMemo } from 'react
 import ResultView from '../components/resultview';
 // import "../styles/components/_datepicker.scss";
 import Select from "react-select";
-import Nav from "../components/nav";
 import DatePicker, { registerLocale } from "react-datepicker";
 import { ko } from 'date-fns/locale';
 registerLocale("ko", ko);
@@ -13,6 +12,7 @@ import range from "lodash/range";
 
 import api from "../commons/apiUtil";
 import { SearchBody, KeywordResult, KeywordListElement } from '../interfaces/interfaces';
+import MainNav from '../components/mainnav';
 
 
 const Now = new Date();
@@ -247,8 +247,9 @@ function Shopping(): ReactElement {
 
   return (
     <>
+      <div className="logo-image">겟인사이트로고</div>
+      <MainNav />
       <div className="shopping-page-view">
-        <Nav />
         <div className="search-container">
           <h1>쇼핑 트렌드 분석 서비스</h1>
           <div className="search-input-bar">
